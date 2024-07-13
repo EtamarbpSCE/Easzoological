@@ -16,7 +16,7 @@ const QRCodeScanner = ({setShowScanner, setResult, setShowInfo}) => {
   
     return (
       <>
-        <video ref={ref} />
+        <video ref={ref} style={{width:'60vw', height: '60vh'}} />
       </>
     );
 }
