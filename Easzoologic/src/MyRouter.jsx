@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Link, useLocation, redirect, useNavigate  } from 'react-router-dom';
 import { useState, useEffect } from 'react'
-import ScanPage from './componenets/Scanner/ScanPage'
+import AdminPage from './pages/AdminPage/AdminPage'
 import MiniDrawer from './componenets/Navbar/Navbar'
 import SignIn from './pages/SignIn/SignIn';
 
@@ -24,8 +24,9 @@ const MyRouter = ()=>{
         <>
             {location.pathname !== "/login" && <MiniDrawer />}
             <Routes>
-                <Route path="/login" exact element={<SignIn/>}></Route>
-                <Route path="/" exact element={<ScanPage/>}></Route> 
+                {/* <Route path="/login" exact element={<SignIn/>}></Route>
+                <Route path="/" exact element={<ScanPage/>}></Route>  */}
+                <Route path="/" exact element={<AdminPage/>}></Route> 
             </Routes>
         </>
     )
