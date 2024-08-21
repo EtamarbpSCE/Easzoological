@@ -124,7 +124,7 @@ const SignupForm = ({setPageState, pageState}) => {
         {({ submitForm, isSubmitting }) => (
             <Box>
             <div>
-                <Typography variant='h2' color='primary'>Add New Cage</Typography>
+                <Typography variant='h2' color='primary'>Add New User</Typography>
             </div>
 
           <Form>
