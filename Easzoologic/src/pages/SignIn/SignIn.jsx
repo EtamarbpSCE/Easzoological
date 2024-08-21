@@ -13,13 +13,15 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
+import api from '../../constants/axios.config';
+import { jwtDecode } from 'jwt-decode';
 
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+       Eazoological App.
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -31,25 +33,37 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function SignIn() {
+export default function SignIn({setUserState}) {
 
-    // Function to handle opening the popup
 
     const navigate = useNavigate();
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    if(data.get('email') === 'etamar1122@gmail.com' && data.get('password') === '123456'){
-        navigate("/")
-        localStorage.setItem("user", "true")
-    } else{
-        alert("invalid user cradentials")
-    }
-    // console.log({
-    //   email: data.get('email'),
-    //   password: data.get('password'),
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        try{
+
+            const data = new FormData(event.currentTarget);
+            const response = await api.post('auth/login', data)
+            const token = response.data.token
+            if(response.data){
+                const decodedToken = jwtDecode(token);
+                const { role } = decodedToken;
+                setUserState(prev => ({
+                    ...prev,
+                    role: role
+                }))
+                navigate("/")
+                localStorage.setItem("user_token",token)
+            } else{
+                alert("invalid user cradentials")
+            }
+        } catch (e) {
+            console.log("error loging in", e)   
+        }
+        // console.log({
+        //   email: data.get('email'),
+        //   password: data.get('password'),
     // });
-  };
+    };
   console.log("check")
   return (
       <ThemeProvider theme={defaultTheme}>

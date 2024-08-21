@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Modal, Box, TextField, Typography, IconButton, Stack, MenuItem, Badge } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
+import api from '../../constants/axios.config';
+
 
 const modalStyle = {
     position: 'absolute',
@@ -19,17 +21,47 @@ const modalStyle = {
 
 
 
-function OpenVetCallModal() {
+function OpenVetCallModal( { cageId } ) {
     const [open, setOpen] = useState(false);
-    const [animalName, setAnimalName] = useState('');
+    const [animalId, setAnimalId] = useState('');
     const [caseDescription, setCaseDescription] = useState('');
     const [images, setImages] = useState([]);
     const [imagePreviews, setImagePreviews] = useState([]);
-
+    const [isLoading, setIsLoading] = useState(false);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [animalsNames, setAnimalsNames] = useState([]);
+    const [succesfull, setSuccessful] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
         setOpen(false)
         setImagePreviews([])
+    };
+
+    const handleSubmit = async () => {
+        setIsLoading(true);
+        setIsSubmitted(true);
+
+        const formData = new FormData();
+        formData.append('cage_id', cageId);
+        formData.append('animal_id', animalId);
+        formData.append('description', caseDescription);
+        images.forEach((image) => {
+            formData.append('images_array', image);
+        });
+
+        try {
+            const results = await api.post('vets/vet_call', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            setSuccessful(true);
+            setIsLoading(false);
+        } catch (e) {
+            console.log(e);
+            setSuccessful(false);
+            setIsLoading(false);
+        }
     };
 
     const handleImageChange = (event) => {
@@ -52,13 +84,26 @@ function OpenVetCallModal() {
         setImagePreviews(imagePreviews.filter((_, i) => i !== index));
     };
 
-    
-    const animalOptions = [
-        { label: 'Dog', value: 'dog' },
-        { label: 'Cat', value: 'cat' },
-        { label: 'Rabbit', value: 'rabbit' },
-        // Add more animal options here
-    ];
+
+    const getAnimalsName = async () => {
+        try{
+
+            const results = await api.get(`/info/cage/${1}`)
+            console.log(results);
+            const animalsArray = results.data.rows.map(element => ({
+                    label:element.animal_name,
+                    value:element.id
+                })
+            )
+            setAnimalsNames(animalsArray)
+        } catch(e) {
+            console.log(e)
+        }
+    }
+
+    useEffect(()=>{
+        getAnimalsName();
+    }, [])
 
 
 
@@ -84,11 +129,11 @@ function OpenVetCallModal() {
                                 fullWidth
                                 label="Animal Name"
                                 select
-                                value={animalName}
-                                onChange={(e) => setAnimalName(e.target.value)}
+                                value={animalId}
+                                onChange={(e) => setAnimalId(e.target.value)}
                                 helperText="Please select the animal"
                             >
-                                {animalOptions.map((option) => (
+                                {animalsNames.map((option) => (
                                     <MenuItem key={option.value} value={option.value}>
                                         {option.label}
                                     </MenuItem>
@@ -134,6 +179,15 @@ function OpenVetCallModal() {
                             ))}
                         </Stack>
                     </Box>
+                    <Button
+                            onClick={handleSubmit}
+                            variant="contained"
+                            component="label"
+                            sx={{ mt: 2 }}
+                        >
+                            Submit
+                    </Button>
+                    {!isLoading && isSubmitted && <Box color={succesfull ? 'green' : 'red'}>{succesfull ? "Submitted succesfully" : "Error submitting the form"}</Box>}
                 </Box>
             </Modal>
         </div>

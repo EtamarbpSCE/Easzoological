@@ -1,19 +1,18 @@
 import { useState } from 'react'
 import ChooseType from '../componenets/ChooseType/ChooseType'
 import AnimalInfoCard from '../componenets/AnimalInfoCard/AnimalInfoCard'
-import { Card, CardActionArea, Container } from '@mui/material'
+import { Button, Card, CardActionArea, Container } from '@mui/material'
 import './infoPage.css'
 import ZookeeperForm from '../componenets/ZookeeperForm/ZookeeperForm'
-import ScanPage from '../componenets/Scanner/ScanPage'
-function InfoPage({cardInfo}) {
+import ScanPage from './ScanPage'
+import Vetform from '../componenets/VetForm/Vetform'
+
+function InfoPage({scannerResult, cardInfo, setPageState}) {
+    const role = 2
+
   return (
     <>
       <div style={{display:'flex', flexDirection: 'column'}}>
-        {/* <ChooseType/> */}
-        {/* card */}
-        {/* form */}
-        {/* submit */}
-        {/* Open call for vet. */}
         <Container>  
             <div className="page_container row col-12">
               <div className='info_card row'>
@@ -24,9 +23,21 @@ function InfoPage({cardInfo}) {
                 </div>
               </div> 
               <div className='form_section'>
-                <ZookeeperForm></ZookeeperForm>
+                {/* role based form */}
+
+                {role == 3 && <ZookeeperForm cageId={cardInfo.id}></ZookeeperForm>}
+                {role == 2 && <Vetform cageId={cardInfo.id}></Vetform>}
               </div> 
               <div className='buttons_sections'>
+                <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={()=>{
+                        setPageState({
+                            infoPage:false,
+                        })}
+                    }
+                >Go back to main page</Button>
               </div> 
             </div>
         </Container>

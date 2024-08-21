@@ -22,6 +22,7 @@ export default function AnimalInfoCard({cardInfo}) {
           <Typography variant="body2" color="text.secondary">
           {cardInfo.content}
           </Typography>
+          {/* role == vet => click to open  */}
         </CardContent>
       </CardActionArea>
     </Card>

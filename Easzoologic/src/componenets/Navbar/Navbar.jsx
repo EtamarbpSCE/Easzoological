@@ -20,7 +20,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LogoutModal from '../../componenets/Navbar/LogoutModal';
 import { useNavigate } from 'react-router';
-
+import Logo from '../../assets/logo.svg'
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -57,6 +57,7 @@ const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
+  color:'#ffffff',
   transition: theme.transitions.create(['width', 'margin'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -88,12 +89,15 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-export default function MiniDrawer() {
+export default function MiniDrawer({userState}) {
+    console.log(userState)
   const [openPopup, setOpenPopup] = React.useState(false);
   const navigate = useNavigate();
   const handleOpenPopup = () => {
     setOpenPopup(true);
   };
+
+
 
   const handleClosePopup = (answer) => {
       console.log('User selected:', answer ? 'Yes' : 'No');
@@ -113,6 +117,11 @@ export default function MiniDrawer() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+    const handleNavigate = (link)=>{
+        navigate(link)
+        handleDrawerClose()
+    }
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -144,14 +153,52 @@ export default function MiniDrawer() {
       </AppBar>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
+            <img src={Logo}/>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </DrawerHeader>
         <Divider />
-       
-        <Divider />
         <List>
+        <ListItem title='Home' key={"Home"} disablePadding sx={{ display: 'block' }} onClick={()=> handleNavigate('/')}>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
+                  }}
+                >
+                </ListItemIcon>
+                <ListItemText title='Home' primary={"Home"} sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>
+        {userState && userState.role === 1 && <ListItem title='Admin Control Panel' key={"Admin Control Panel"} disablePadding sx={{ display: 'block' }} onClick={()=> handleNavigate('/admin')}>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <LogoutIcon title='Admin Control Panel'></LogoutIcon>
+                </ListItemIcon>
+                <ListItemText title='Admin Control Panel' primary={"Admin Control Panel"} sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>}
             <ListItem title='Logout' key={"Logout"} disablePadding sx={{ display: 'block' }} onClick={handleOpenPopup}>
               <ListItemButton
                 sx={{
@@ -172,6 +219,7 @@ export default function MiniDrawer() {
                 <ListItemText title='Logout' primary={"Logout"} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
+            
         </List>
       </Drawer>
     </Box>
