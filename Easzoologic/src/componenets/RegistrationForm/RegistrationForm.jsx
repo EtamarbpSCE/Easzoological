@@ -127,7 +127,7 @@ const SignupForm = ({setPageState, pageState}) => {
                 <Typography variant='h2' color='primary'>Add New Cage</Typography>
             </div>
 
-          <Form  style={{width:'40%'}}>
+          <Form>
             <Box margin={2}>
               <Field
                 component={FormikMuiTextField}
