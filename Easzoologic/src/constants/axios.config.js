@@ -3,7 +3,7 @@ import axios from 'axios';
 let url = window.location.href.includes('localhost') ? 'http://localhost:3001/' : 'https://server.easzoologic.xyz/'
 
 const api = axios.create({
-  baseURL: 'http://localhost:3001/',
+  baseURL: url,
   headers: {
     'Content-Type': 'application/json'
   }
