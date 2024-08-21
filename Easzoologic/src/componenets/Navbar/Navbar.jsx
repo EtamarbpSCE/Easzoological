@@ -124,7 +124,7 @@ export default function MiniDrawer({userState}) {
     }
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex'}}>
       <LogoutModal
           isOpen={openPopup}
           handleClose={handleClosePopup}

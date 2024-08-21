@@ -8,6 +8,9 @@ import AdminPage from './pages/Admin/Admin';
 import UnauthorizedPage from './pages/Unauthorized/Unauthorized';
 import { jwtDecode } from 'jwt-decode';
 import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
+import SignupForm from './componenets/RegistrationForm/RegistrationForm';
+import CageForm from './componenets/CageForm/CageForm';
+import UserTable from './componenets/AdminUsersTable/AdminUsersTable';
 
 const MyRouter = ()=>{
     const location = useLocation();
@@ -51,6 +54,9 @@ const MyRouter = ()=>{
                 <Route path="/admin" exact element={withAuth(AdminPage,[1],setUserState)()}></Route> 
                 <Route path="/unauthorized" exact element={<UnauthorizedPage/>}></Route> 
                 <Route path="/newUser" exact element={<ForgotPassword/>}></Route> 
+                <Route path="/admin/register" exact element={<SignupForm/>}></Route> 
+                <Route path="/admin/add_cage" exact element={<CageForm/>}></Route> 
+                <Route path="/admin/users" exact element={<UserTable/>}></Route> 
             </Routes>
         </>
     )

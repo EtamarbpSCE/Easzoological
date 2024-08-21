@@ -4,6 +4,8 @@ import TableWrapper from '../../componenets/DataTable/TableWrapper';
 import Logo from '../../assets/logo.svg'
 import AdminTables from '../../componenets/DataTable/AdminTables';
 import SignupForm from '../../componenets/RegistrationForm/RegistrationForm';
+import CageForm from '../../componenets/CageForm/CageForm';
+import { useNavigate } from 'react-router';
 
 const content = 
     {   
@@ -20,19 +22,24 @@ function AdminPage() {
         signUp: false,
         showInfo: false,
     })
+    const navigate = useNavigate()
     
     const handleRegisterUser = () => {
-        setPageState(prev => ({
-            ...prev,
-            signUp: !pageState.signUp
-        }))
+        navigate('/admin/register')
         // Logic for registering a user
         console.log('Register User button clicked');
     };
 
     const handleCreateCage = () => {
-        // Logic for creating a new cage
-        console.log('Create New Cage button clicked');
+        navigate('/admin/add_cage')
+        // Logic for registering a user
+        console.log('Register User button clicked');
+    };
+
+    const handleUsers = () => {
+        navigate('/admin/users')
+        // Logic for registering a user
+        console.log('Register User button clicked');
     };
     // const [showInfo, setShowInfo] =  (false);
     return (
@@ -49,27 +56,34 @@ function AdminPage() {
                 maxHeight: '100%' // Ensures image doesn't overflow
             }}
         />
-        <Box sx={{ my: 2, textAlign: 'center' }}>
+        <Box sx={{ my: 3, textAlign: 'center' }}>
             <Button 
                 variant="contained" 
                 color="primary" 
                 onClick={handleRegisterUser} 
-                sx={{ mr: 2 }}
+                sx={{ mr: 1 }}
             >
-                Register User
+                Add New User
             </Button>
             <Button 
                 variant="contained" 
                 color="primary" 
                 onClick={handleCreateCage}
+                sx={{ mr: 1 }}
             >
-                Create New Cage
+                Add New Cage
+            </Button>
+            <Button 
+                variant="contained" 
+                color="primary" 
+                onClick={handleUsers}
+            >
+                Users
             </Button>
         </Box>
         <Box sx={{ my: 2 }}>
-           {!pageState.signUp && <AdminTables /> }
+           {<AdminTables /> }
         </Box>
-        {pageState.signUp && <SignupForm setPageState={setPageState} pageState={pageState}></SignupForm>}
     </Box>
     );
 }

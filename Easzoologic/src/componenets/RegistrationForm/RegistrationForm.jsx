@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik, Form, Field } from 'formik';
 import { Button, LinearProgress, MenuItem, TextField, Box } from '@mui/material';
 import api from '../../constants/axios.config';
@@ -8,6 +8,9 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { useNavigate, useParams } from 'react-router';
+import { useSearchParams } from 'react-router-dom';
+import { CheckCircleOutline } from '@mui/icons-material';
 
 // Custom component to integrate MUI TextField with Formik
 const FormikMuiTextField = ({ field, form, ...other }) => {
@@ -25,6 +28,52 @@ const FormikMuiTextField = ({ field, form, ...other }) => {
 
 const SignupForm = ({setPageState, pageState}) => {
   const [openConfirmDialog, setOpenConfirmDialog] = useState({show:false, message:"Submission done"});
+  const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [emailSent, setEmailSent] = useState(false);
+  const [userId, setUserId] = useState(null)
+  const [formValues, setFormValues] = useState({
+    fullName: '',
+    role: '',
+    email:'',
+    password:'',
+  })
+  const [editUser, setEditUser] = useState(null);
+
+    const getUsers = async (id)=>{
+        try{
+            const response = await api.get(`info/users/${id}`)
+            console.log(response)
+            setEditUser(true)
+            const userData = response.data.rows[0];
+            setFormValues(prev => ({
+                ...prev,
+                fullName: userData.full_name,
+                role: userData.role,
+                email:userData.email,
+            }))
+            console.log(response.data)
+        }catch(e){  
+            console.log('cant retrive user ', e);
+        }
+    }
+    useEffect(()=>{
+        const searchUserId = searchParams.get('id')
+        console.log(searchUserId)
+        if(searchUserId){
+            setUserId(searchUserId)
+            getUsers(searchUserId);
+        }  
+    },[])
+
+    const handleSendNewPassword = async ()=>{
+        try{
+            const response = await api.post(`auth/reset_password`,{email:formValues.email})
+            setEmailSent(true);
+        }catch(e){  
+            console.log('cant send password reset ', e);
+        }
+    }
 
   const handleToggleConfirmDialog = () => {
         setOpenConfirmDialog(false)
@@ -34,15 +83,15 @@ const SignupForm = ({setPageState, pageState}) => {
         }))
   };
 
+    const backToPanel = () => {
+        navigate(-1)
+    };
+
   return (
     <>
       <Formik
-        initialValues={{
-          fullName: '',
-          role: '',
-          email:'',
-          password:'',
-        }}
+      enableReinitialize={true}
+        initialValues={formValues}
         validate={values => {
           const errors = {};
           if (!values.fullName) {
@@ -58,7 +107,8 @@ const SignupForm = ({setPageState, pageState}) => {
         }}
         onSubmit={async (values, { setSubmitting }) => {
           try {
-            const res = await api.post('/auth/createUser', values);
+            const path = userId ? `auth/users/${userId}` : 'auth/createUser'
+            const res = await api.post(path, values);
             setSubmitting(false);
             console.log("res.code", res)
             if(res.data.code === 1){
@@ -72,7 +122,7 @@ const SignupForm = ({setPageState, pageState}) => {
         }}
       >
         {({ submitForm, isSubmitting }) => (
-          <Form>
+          <Form  style={{width:'40%'}}>
             <Box margin={2}>
               <Field
                 component={FormikMuiTextField}
@@ -93,6 +143,27 @@ const SignupForm = ({setPageState, pageState}) => {
                 required
               />
             </Box>
+            {userId && 
+                <Box margin={2} display={'flex'} justifyContent={'center'} alignItems={'center'} gap={'5px'}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        disabled={isSubmitting}
+                        onClick={handleSendNewPassword}
+                    >
+                        Send Reset Passowrd Link.
+                        
+                    </Button>
+                    {emailSent ? 
+                        (
+                            <>
+                                <CheckCircleOutline sx={{color:'green'}} />
+                            </>
+                        ) 
+                        : null
+                    }
+                </Box>
+            }
             <Box margin={2}>
               <Field
                 component={FormikMuiTextField}
@@ -115,16 +186,25 @@ const SignupForm = ({setPageState, pageState}) => {
             <Box margin={2}>
               {isSubmitting && <LinearProgress />}
             </Box>
-            <Box margin={2}>
-              <Button
-                variant="contained"
-                color="primary"
-                disabled={isSubmitting}
-                onClick={submitForm}
-              >
-                Submit
-              </Button>
-            </Box>
+            <Box margin={2} justifyContent={'space-between'} display={'flex'}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    disabled={isSubmitting}
+                    onClick={backToPanel}
+                >
+                    Go Back
+                    
+                </Button>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    disabled={isSubmitting}
+                    onClick={submitForm}
+                >
+                    Submit
+                </Button>
+                </Box>
           </Form>
         )}
       </Formik>
