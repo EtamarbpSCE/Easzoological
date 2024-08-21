@@ -122,6 +122,11 @@ const SignupForm = ({setPageState, pageState}) => {
         }}
       >
         {({ submitForm, isSubmitting }) => (
+            <Box>
+            <div>
+                <Typography variant='h2' color='primary'>Add New Cage</Typography>
+            </div>
+
           <Form  style={{width:'40%'}}>
             <Box margin={2}>
               <Field
@@ -206,6 +211,7 @@ const SignupForm = ({setPageState, pageState}) => {
                 </Button>
                 </Box>
           </Form>
+          </Box>
         )}
       </Formik>
       <Dialog
