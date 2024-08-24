@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useZxing } from "react-zxing";
 
-const QRCodeScanner = ({setShowScanner, setResult, setShowInfo}) => {
+const QRCodeScanner = ({setResult, setShowInfo}) => {
 
     const {
       ref,
     } = useZxing({
       onDecodeResult(result) {
         setResult(result.getText());
-        setShowScanner(false)
+        // setShowInfo(prev => ({...prev, showScanner: false}))
         // setShowInfo(true)
         console.log(result.getText())
       },
+    //   onDecodeError(error){
+    //     console.log("ERROR!!! ,", error)
+    //   }
     });
   
     return (

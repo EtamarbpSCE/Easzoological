@@ -7,6 +7,7 @@ import QrCodeIcon from '@mui/icons-material/QrCode';
 import { Box, Button } from '@mui/material';
 import Logo from '../assets/logo.svg'
 import { Image } from '@mui/icons-material';
+import api from '../constants/axios.config';
 
 
 const content = 
@@ -20,24 +21,38 @@ const content =
     }
 
 function ScanPage({role}) {
+    console.log(role)
     const [pageState, setPageState] = useState({
         showScanner: false,
         showInfo: false,
     })
     // const [showInfo, setShowInfo] =  (false);
-    const [scannerResult, setScannerResult] = useState();
+    const [scannerResult, setScannerResult] = useState('');
     const [cardInfo, setCardInfo] = useState('')
     useEffect(()=>{
+        console.log("yo wtf")
         const result = scannerResult ? JSON.parse(scannerResult)['details'].id : null
-        if(result && content[result]){
+        console.log("result ", result)
+        if(result){
+            getCageDetails(result);
             setPageState(({
                 showScanner: false,
                 showInfo: true
             }));
-            setCardInfo({id:1, ...content[result]})
+            // setCardInfo({id:result, ...content[result]})
         }
 
-    }, scannerResult)
+    }, [scannerResult])
+
+    const getCageDetails = async (id)=>{
+        try{
+            const results = await api.get('/info/cage/' + id)
+            console.log(results);
+            setCardInfo(results.data.rows[0])
+        }catch(e){
+            console.log("Error getting cage info: ", e);
+        }
+    }
     return (
         // <div style={{display:'flex', flexDirection: 'column' , gap:'12px', justifyContent:'center'}} className='container row col-m-12'>
         <Box sx={{ p: 2, width:{sm:'100%', l:'50%', xl:"80%"}}}>
@@ -85,7 +100,7 @@ function ScanPage({role}) {
                     {!pageState.showScanner && !pageState.showInfo && <TableWrapper role={role}/>}
                 </div>
             </div>
-            {pageState.showInfo && <InfoPage scannerResult={scannerResult} cardInfo={cardInfo} setPageState={setPageState}></InfoPage>}
+            {pageState.showInfo && <InfoPage role={role} scannerResult={scannerResult} cardInfo={cardInfo} setPageState={setPageState}></InfoPage>}
         </Box>
     );
 }

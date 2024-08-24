@@ -9,12 +9,12 @@ export default function AnimalInfoCard({cardInfo}) {
   return (
     <Card sx={{ width: '80vw' }}>
       <CardActionArea>
-        <CardMedia
+        {/* <CardMedia
           component="img"
           height="140"
           image={cardInfo.img}
           alt="green iguana"
-        />
+        /> */}
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
           {cardInfo.title}

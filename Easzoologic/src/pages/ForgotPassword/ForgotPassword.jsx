@@ -39,7 +39,6 @@ export default function ForgotPassword({ setUserState }) {
 
     });
     const navigate = useNavigate();
-
     const invalidToken = ()=>{
         setOpenConfirmDialog({show:true, message:"Somthing wrong with the token, redirecting to login."})
         setTimeout(()=>{
@@ -53,6 +52,7 @@ export default function ForgotPassword({ setUserState }) {
             invalidToken();
         }
     },[])
+
     const handleEmailSubmit = async (event) => {
         event.preventDefault();
         const token = searchParams.get('token');
@@ -136,7 +136,7 @@ export default function ForgotPassword({ setUserState }) {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{'Confirm Action'}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">{'Woops'}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         {openConfirmDialog.message}

@@ -183,9 +183,9 @@ const SignupForm = ({setPageState, pageState}) => {
                 }}
                 required
               >
-                <MenuItem value="3">Admin</MenuItem>
-                <MenuItem value="2">Zoo Keeper</MenuItem>
-                <MenuItem value="1">Veterinarian</MenuItem>
+                <MenuItem value="1">Admin</MenuItem>
+                <MenuItem value="3">Zoo Keeper</MenuItem>
+                <MenuItem value="2">Veterinarian</MenuItem>
               </Field>
             </Box>
             <Box margin={2}>

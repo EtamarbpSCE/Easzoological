@@ -48,53 +48,54 @@ const CageForm = ({ setPageState, pageState }) => {
         </div>
         <Formik
             initialValues={{
-            animalType: '',
-            title: '',
-            description: '',
-            animals: [
-                {
                 animalType: '',
-                animalName: '',
-                animalAge: ''
-                }
-            ]
+                title: '',
+                description: '',
+                animals: [
+                    {
+                    animalType: '',
+                    animalName: '',
+                    animalAge: ''
+                    }
+                ]
             }}
-            validate={values => {
-            const errors = {};
-            if (!values.animalType) {
-                errors.animalType = 'Required';
-            }
-            if (!values.title) {
-                errors.title = 'Required';
-            }
-            if (!values.description) {
-                errors.description = 'Required';
-            }
-            values.animals.forEach((animal, index) => {
-                if (!animal.animalType) {
-                errors[`animals.${index}.animalType`] = 'Required';
+            validator={values => {
+                const errors = {};
+                if (!values.animalType) {
+                    errors.animalType = 'Required';
                 }
-                if (!animal.animalName) {
-                errors[`animals.${index}.animalName`] = 'Required';
+                if (!values.title) {
+                    errors.title = 'Required';
                 }
-                if (!animal.animalAge) {
-                errors[`animals.${index}.animalAge`] = 'Required';
+                if (!values.description) {
+                    errors.description = 'Required';
                 }
-            });
-            return errors;
+                values.animals.forEach((animal, index) => {
+                    if (!animal.animalType) {
+                    errors[`animals.${index}.animalType`] = 'Required';
+                    }
+                    if (!animal.animalName) {
+                    errors[`animals.${index}.animalName`] = 'Required';
+                    }
+                    if (!animal.animalAge) {
+                    errors[`animals.${index}.animalAge`] = 'Required';
+                    }
+                });
+                return errors;
             }}
             onSubmit={async (values, { setSubmitting }) => {
-            try {
-                const res = await api.post('/your-endpoint', values);
-                setSubmitting(false);
-                if (res.data.code === 1) {
-                setOpenConfirmDialog(prev => ({ message: 'Error occurred.', show: true }));
-                return;
+                console.log("ASDFASDF")
+                try {
+                    const res = await api.post('/admin/new_cage', values);
+                    setSubmitting(false);
+                    if (res.data.code === 1) {
+                    setOpenConfirmDialog(prev => ({ message: 'Error occurred.', show: true }));
+                    return;
+                    }
+                    setOpenConfirmDialog(prev => ({ ...prev, show: true }));
+                } catch (e) {
+                    console.log('Error submitting:', e);
                 }
-                setOpenConfirmDialog(prev => ({ ...prev, show: true }));
-            } catch (e) {
-                console.log('Error submitting:', e);
-            }
             }}
         >
             {({ submitForm, isSubmitting }) => (
@@ -143,6 +144,8 @@ const CageForm = ({ setPageState, pageState }) => {
                             label="Animal Type"
                             fullWidth
                             required
+                            disabled
+                            value={form.values.animalType} 
                         />
                         <Field
                             component={FormikMuiTextField}
@@ -194,7 +197,8 @@ const CageForm = ({ setPageState, pageState }) => {
                         variant="contained"
                         color="primary"
                         disabled={isSubmitting}
-                        onClick={submitForm}
+                        // onClick={()=>{console.log("asdfasdfasdfasdfasdf")}}
+                        type="submit"
                     >
                         Submit
                     </Button>

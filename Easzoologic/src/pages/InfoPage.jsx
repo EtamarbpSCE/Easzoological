@@ -7,8 +7,7 @@ import ZookeeperForm from '../componenets/ZookeeperForm/ZookeeperForm'
 import ScanPage from './ScanPage'
 import Vetform from '../componenets/VetForm/Vetform'
 
-function InfoPage({scannerResult, cardInfo, setPageState}) {
-    const role = 2
+function InfoPage({role, cardInfo, setPageState}) {
 
   return (
     <>

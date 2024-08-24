@@ -24,7 +24,7 @@ const FormikMuiTextField = ({ field, form, ...other }) => {
   );
 };
 
-const ZookeeperForm = ({cageId = 1}) => {
+const ZookeeperForm = ({cageId}) => {
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
 
 

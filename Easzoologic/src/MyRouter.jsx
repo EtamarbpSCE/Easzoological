@@ -21,9 +21,10 @@ const MyRouter = ()=>{
         role:null,
         name:''
     })
+
     useEffect(() => {
         const user = localStorage.getItem('user_token');
-        if (!user && location.pathname !== "/login") {
+        if (!user && location.pathname !== "/login" && location.pathname !== "/newUser" ) {
             navigate('/login');
         } 
     }, [navigate]);
@@ -50,7 +51,7 @@ const MyRouter = ()=>{
             {(location.pathname !== "/login" && location.pathname !== "/newUser" && location.pathname !== "/forgotPassword") && <MiniDrawer userState={userState}/>}
             <Routes>
                 <Route path="/login" exact element={<SignIn setUserState={setUserState}/>}></Route>
-                <Route path="/" exact element={withAuth(ScanPage,[1,2,3],setUserState)()}></Route> 
+                <Route path="/" exact element={withAuth(ScanPage,[1,2,3],userState)()}></Route> 
                 <Route path="/admin" exact element={withAuth(AdminPage,[1],setUserState)()}></Route> 
                 <Route path="/unauthorized" exact element={<UnauthorizedPage/>}></Route> 
                 <Route path="/newUser" exact element={<ForgotPassword/>}></Route> 

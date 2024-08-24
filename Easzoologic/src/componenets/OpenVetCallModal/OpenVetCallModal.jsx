@@ -88,7 +88,7 @@ function OpenVetCallModal( { cageId } ) {
     const getAnimalsName = async () => {
         try{
 
-            const results = await api.get(`/info/cage/${1}`)
+            const results = await api.get(`/info/cage_animals/${cageId}`)
             console.log(results);
             const animalsArray = results.data.rows.map(element => ({
                     label:element.animal_name,
