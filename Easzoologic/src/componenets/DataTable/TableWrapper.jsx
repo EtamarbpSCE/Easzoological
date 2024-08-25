@@ -143,7 +143,7 @@ export default function TableWrapper({ role }) {
                 </Grid>
             )}
             <Grid item xs={12} alignContent='center' alignItems="center" justifyContent="center" style={{display:"flex", justifyContent:'cetner'}} >
-                {activeTable === 'tableData' ? <TableData setRefetch={setRefetch} tableRows={tableRows} /> : null}
+                {activeTable === 'tableData' ? <TableData role={role} setRefetch={setRefetch} tableRows={tableRows} /> : null}
                 {role != 3 && activeTable === 'openVetCallsTable' ? < OpenVetCallsTable tableRows={openVetCallsRows} setRefetch={setRefetch} /> : null}
 
             </Grid>

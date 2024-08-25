@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { Button, TextField } from '@mui/material';
+import { Button, Link, TextField } from '@mui/material';
 import { useRef } from 'react';
 import { useState } from 'react';
 
@@ -40,6 +40,9 @@ function createData(id, calories, fat, carbs, protein, price) {
     ],
   };
 }
+const fileName = (qr) => {
+    return `https://server.easzoologic.xyz/images/` + qr.split('\\').pop();
+};
 
 function Row(props) {
   const { row } = props;
@@ -71,9 +74,19 @@ function Row(props) {
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
-                Additional Data
-              </Typography>
+                <Box display='flex' flexDirection='row' justifyContent={'space-between'} >
+                    <Typography variant="h6" gutterBottom component="div">
+                        Additional Data
+                    </Typography>
+                       {props.role === 1 &&
+                        <a 
+                            href={fileName(row.QR_path)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            QR code
+                        </a>}
+                </Box>
               <Typography variant="paragraph" gutterBottom component="div">
                 {row.content}
               </Typography>
@@ -124,7 +137,7 @@ Row.propTypes = {
 };
 
 
-export default function TableData({tableRows}) {
+export default function TableData({role, tableRows}) {
     console.log(tableRows)
   return (
     <>
@@ -142,7 +155,7 @@ export default function TableData({tableRows}) {
             </TableHead>
             <TableBody>
             {tableRows?.map((row) => (
-                <Row key={row.name} row={row} />
+                <Row role={role} key={row.name} row={row} />
             ))}
             </TableBody>
         </Table>

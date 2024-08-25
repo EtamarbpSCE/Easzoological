@@ -33,7 +33,7 @@ const MyRouter = ()=>{
     ];
     useEffect(() => {
         const user = localStorage.getItem('user_token');
-        if (!user && ! pathsWithoutDrawer.includes(location.pathname)) {
+        if (!user && !pathsWithoutDrawer.includes(location.pathname)) {
             navigate('/login');
         } 
     }, [navigate]);
