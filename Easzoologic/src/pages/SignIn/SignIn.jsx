@@ -42,6 +42,7 @@ export default function SignIn({setUserState}) {
         try{
 
             const data = new FormData(event.currentTarget);
+            console.log("data" , data);
             const response = await api.post('auth/login', data)
             const token = response.data.token
             if(response.data){
@@ -119,7 +120,7 @@ export default function SignIn({setUserState}) {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link href="/password_reset" variant="body2">
                   Forgot password?
                 </Link>
               </Grid>

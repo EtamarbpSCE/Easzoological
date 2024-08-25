@@ -112,10 +112,9 @@ export default function ForgotPassword({ setUserState }) {
                 return;
             }
             try {
-                console.log("WHJATS")
                 const data = {email, password};
                 const response = await api.post('auth/signup', data);
-                setOpenConfirmDialog({show:true, message:"Registered succesfully, you are being re directed to login"})
+                setOpenConfirmDialog({show:true, message:"Registered succesfully, you are being re-directed to login"})
                 setTimeout(()=>{
                     navigate('/login')
                 }, 3000);

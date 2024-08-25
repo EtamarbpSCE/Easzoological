@@ -11,6 +11,8 @@ import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
 import SignupForm from './componenets/RegistrationForm/RegistrationForm';
 import CageForm from './componenets/CageForm/CageForm';
 import UserTable from './componenets/AdminUsersTable/AdminUsersTable';
+import PasswordReset from './pages/PasswordReset/PasswordReset';
+import PasswordResetConfirmation from './pages/PasswordReset/PasswordResetConfirmation';
 
 const MyRouter = ()=>{
     const location = useLocation();
@@ -40,6 +42,15 @@ const MyRouter = ()=>{
         }
     },[])
 
+    const pathsWithoutDrawer = [
+        '/login',
+        '/newUser',
+        '/forgotPassword',
+        '/password_reset',
+        '/password-reset-confirmation',
+        // Add more paths if needed
+    ];
+
     //TODO:
     // Vets:
     // create a list with the vets open calls.
@@ -48,9 +59,11 @@ const MyRouter = ()=>{
     // coonect the feeding and vet call to the db and server logic.
     return(
         <>
-            {(location.pathname !== "/login" && location.pathname !== "/newUser" && location.pathname !== "/forgotPassword") && <MiniDrawer userState={userState}/>}
+            {(!pathsWithoutDrawer.includes(location.pathname)) && <MiniDrawer userState={userState}/>}
             <Routes>
                 <Route path="/login" exact element={<SignIn setUserState={setUserState}/>}></Route>
+                <Route path="/password_reset" exact element={<PasswordReset setUserState={setUserState}/>}></Route>
+                <Route path="/password-reset-confirmation" exact element={<PasswordResetConfirmation />}></Route>
                 <Route path="/" exact element={withAuth(ScanPage,[1,2,3],userState)()}></Route> 
                 <Route path="/admin" exact element={withAuth(AdminPage,[1],setUserState)()}></Route> 
                 <Route path="/unauthorized" exact element={<UnauthorizedPage/>}></Route> 
