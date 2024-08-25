@@ -23,10 +23,17 @@ const MyRouter = ()=>{
         role:null,
         name:''
     })
-
+    const pathsWithoutDrawer = [
+        '/login',
+        '/newUser',
+        '/forgotPassword',
+        '/password_reset',
+        '/password-reset-confirmation',
+        // Add more paths if needed
+    ];
     useEffect(() => {
         const user = localStorage.getItem('user_token');
-        if (!user && location.pathname !== "/login" && location.pathname !== "/newUser" ) {
+        if (!user && ! pathsWithoutDrawer.includes(location.pathname)) {
             navigate('/login');
         } 
     }, [navigate]);
@@ -42,14 +49,7 @@ const MyRouter = ()=>{
         }
     },[])
 
-    const pathsWithoutDrawer = [
-        '/login',
-        '/newUser',
-        '/forgotPassword',
-        '/password_reset',
-        '/password-reset-confirmation',
-        // Add more paths if needed
-    ];
+
 
     //TODO:
     // Vets:
