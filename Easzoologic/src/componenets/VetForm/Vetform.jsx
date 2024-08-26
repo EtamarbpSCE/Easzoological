@@ -1,23 +1,51 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik, Form, Field } from 'formik';
 import { Button, LinearProgress, MenuItem, TextField, Box, Typography } from '@mui/material';
 import CheckHistoryModal from '../CheckHistoryModal/CheckHistoryModal';
+import api from '../../constants/axios.config';
 
 // Custom component to integrate MUI TextField with Formik
 const FormikMuiTextField = ({ field, form, ...other }) => {
-  const currentError = form.errors[field.name];
-  const touched = form.touched[field.name];
-  return (
-    <TextField
-      {...field}
-      {...other}
-      error={Boolean(touched && currentError)}
-      helperText={touched && currentError}
-    />
-  );
+    const currentError = form.errors[field.name];
+    const touched = form.touched[field.name];
+ 
+
+    return (
+        <TextField
+            {...field}
+            {...other}
+            error={Boolean(touched && currentError)}
+            helperText={touched && currentError}
+        />
+    );
 };
 
+
+
 const Vetform = ({ cageId }) => {
+
+    const [animalNames, setAnimalsNames] = useState([]);
+
+
+    const getAnimalsName = async () => {
+        try{
+
+            const results = await api.get(`/info/cage_animals/${cageId}`)
+            console.log(results);
+            const animalsArray = results.data.rows.map(element => ({
+                    label:element.animal_name,
+                    value:element.id
+                })
+            )
+            setAnimalsNames(animalsArray)
+        } catch(e) {
+            console.log(e)
+        }
+    }
+
+    useEffect(()=>{
+        getAnimalsName();
+    }, [])
 
     return (
         <Formik
@@ -65,9 +93,11 @@ const Vetform = ({ cageId }) => {
                                 shrink: true,
                             }}
                         >
-                            <MenuItem value="Dog">Dog</MenuItem>
-                            <MenuItem value="Cat">Cat</MenuItem>
-                            <MenuItem value="Rabbit">Rabbit</MenuItem>
+                            {animalNames?.map(element => 
+                                <MenuItem value={element.value}>{element.label}</MenuItem>
+                            )}
+                            {/* <MenuItem value="Cat">Cat</MenuItem>
+                            <MenuItem value="Rabbit">Rabbit</MenuItem> */}
                         </Field>
                     </Box>
                     <Box margin={2}>
@@ -105,7 +135,7 @@ const Vetform = ({ cageId }) => {
                         >
                             Submit
                         </Button>
-                        <CheckHistoryModal />
+                        <CheckHistoryModal cageId={cageId} />
                     </Box>
                 </Form>
             )}

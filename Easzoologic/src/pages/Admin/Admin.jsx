@@ -1,5 +1,7 @@
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Typography, useMediaQuery } from '@mui/material';
 import React, { useState } from 'react';
+import { useTheme } from '@mui/material/styles';
+
 import TableWrapper from '../../componenets/DataTable/TableWrapper';
 import Logo from '../../assets/logo.svg'
 import AdminTables from '../../componenets/DataTable/AdminTables';
@@ -22,7 +24,13 @@ function AdminPage() {
         signUp: false,
         showInfo: false,
     })
+
+
+    const theme = useTheme();
     const navigate = useNavigate()
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+
     
     const handleRegisterUser = () => {
         navigate('/admin/register')
@@ -45,6 +53,13 @@ function AdminPage() {
     return (
         // <div style={{display:'flex', flexDirection: 'column' , gap:'12px', justifyContent:'center'}} className='container row col-m-12'>
         <Box sx={{ p: 2, width: { sm: '100%', l: '50%', xl: '80%' } }}>
+            {isMobile && (
+                <Box sx={{ mb: 2, textAlign: 'center' }}>
+                    <Typography variant="body1" color="error">
+                        This page is not optimized for mobile use. Please use a desktop for the best experience.
+                    </Typography>
+                </Box>
+            )}
         <Box
             component="img"
             src={Logo}

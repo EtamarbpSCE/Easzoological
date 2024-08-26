@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Modal, Box, Typography, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import api from '../../constants/axios.config';
 
 const modalStyle = {
     position: 'absolute',
@@ -23,11 +24,40 @@ const sampleData = [
     // Add more rows as needed
 ];
 
-function CheckHistoryModal() {
+function CheckHistoryModal({cageId}) {
     const [open, setOpen] = useState(false);
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    const [treatments, setTreatments] = useState([]);
+
+
+    const getTreatment = async () => {
+        try{
+
+            const results = await api.get(`/info/vet_calls_logs/${cageId}`)
+            console.log("results" , results);
+            if(results.data.length){
+                setTreatments([])
+                return;
+            }
+            const animalsArray = results.data.rows.map(element => ({
+                    label:element.animal_name,
+                    value:element.id
+                })
+            )
+            setTreatments(animalsArray)
+        } catch(e) {
+            console.log(e)
+        }
+    }
+
+    useEffect(()=>{
+        console.log("sdfasdf")
+        getTreatment();
+    }, [])
+
 
     return (
         <div>
@@ -54,7 +84,7 @@ function CheckHistoryModal() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {sampleData.map((row) => (
+                                {treatments.map((row) => (
                                     <TableRow key={row.id}>
                                         <TableCell component="th" scope="row">
                                             {row.id}

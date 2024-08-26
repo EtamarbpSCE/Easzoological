@@ -57,6 +57,7 @@ const SignupForm = ({setPageState, pageState}) => {
             console.log('cant retrive user ', e);
         }
     }
+    
     useEffect(()=>{
         const searchUserId = searchParams.get('id')
         console.log(searchUserId)

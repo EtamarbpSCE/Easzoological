@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, FieldArray } from 'formik';
-import { Button, LinearProgress, MenuItem, TextField, Box, IconButton, Typography } from '@mui/material';
+import { Button, LinearProgress, TextField, Box, IconButton, Typography } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import api from '../../constants/axios.config';
-import CloseIcon from '@mui/icons-material/Close';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useNavigate } from 'react-router';
+import { useSearchParams } from 'react-router-dom';
 
-// Custom component to integrate MUI TextField with Formik
 const FormikMuiTextField = ({ field, form, ...other }) => {
   const currentError = form.errors[field.name];
   const touched = form.touched[field.name];
@@ -28,16 +27,54 @@ const FormikMuiTextField = ({ field, form, ...other }) => {
 
 const CageForm = ({ setPageState, pageState }) => {
     const [openConfirmDialog, setOpenConfirmDialog] = useState({ show: false, message: "Submission done" });
-    const navigate=useNavigate()
+    const [formValues, setFormValues] = useState({
+        animalType: '',
+        title: '',
+        description: '',
+        animals: [
+            { animalType: '', animalName: '', animalAge: '' }
+        ]
+    });
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const [cageId, setCageId] = useState(null);
+
+    const getCageInfo = async (id) => {
+        try {
+            const response = await api.get(`info/cage/${id}`);
+            const userData = response.data.rows[0];
+            console.log("userData ", userData)
+            setFormValues({
+                animalType: userData.animal_type || '',
+                title: userData.title || '',
+                description: userData.content || '',
+                animals: JSON.parse(userData.animals) || [{ animalType: '', animalName: '', animalAge: '' }]
+            });
+            console.log(response.data);
+        } catch (e) {
+            console.log('Cannot retrieve user ', e);
+        }
+    };
+
+    useEffect(() => {
+        const searchUserId = searchParams.get('id');
+        console.log(searchUserId);
+        if (searchUserId) {
+            setCageId(searchUserId);
+            getCageInfo(searchUserId);
+        }  
+    }, [searchParams]);
+
     const handleToggleConfirmDialog = () => {
         setOpenConfirmDialog(false);
         setPageState(prev => ({
-        ...prev,
-        signUp: false
+            ...prev,
+            signUp: false
         }));
     };
+
     const backToPanel = () => {
-       navigate(-1)
+       navigate(-1);
     };
 
     return (
@@ -47,18 +84,8 @@ const CageForm = ({ setPageState, pageState }) => {
             <Typography variant='h2' color='primary'>Add New Cage</Typography>
         </div>
         <Formik
-            initialValues={{
-                animalType: '',
-                title: '',
-                description: '',
-                animals: [
-                    {
-                    animalType: '',
-                    animalName: '',
-                    animalAge: ''
-                    }
-                ]
-            }}
+            enableReinitialize
+            initialValues={formValues}
             validator={values => {
                 const errors = {};
                 if (!values.animalType) {
@@ -72,25 +99,25 @@ const CageForm = ({ setPageState, pageState }) => {
                 }
                 values.animals.forEach((animal, index) => {
                     if (!animal.animalType) {
-                    errors[`animals.${index}.animalType`] = 'Required';
+                        errors[`animals.${index}.animalType`] = 'Required';
                     }
                     if (!animal.animalName) {
-                    errors[`animals.${index}.animalName`] = 'Required';
+                        errors[`animals.${index}.animalName`] = 'Required';
                     }
                     if (!animal.animalAge) {
-                    errors[`animals.${index}.animalAge`] = 'Required';
+                        errors[`animals.${index}.animalAge`] = 'Required';
                     }
                 });
                 return errors;
             }}
             onSubmit={async (values, { setSubmitting }) => {
-                console.log("ASDFASDF")
+                const url = cageId ? '/admin/new_cage/' + cageId : '/admin/new_cage';
                 try {
-                    const res = await api.post('/admin/new_cage', values);
+                    const res = await api.post(url, values);
                     setSubmitting(false);
                     if (res.data.code === 1) {
-                    setOpenConfirmDialog(prev => ({ message: 'Error occurred.', show: true }));
-                    return;
+                        setOpenConfirmDialog(prev => ({ message: 'Error occurred.', show: true }));
+                        return;
                     }
                     setOpenConfirmDialog(prev => ({ ...prev, show: true }));
                 } catch (e) {
@@ -191,13 +218,11 @@ const CageForm = ({ setPageState, pageState }) => {
                         onClick={backToPanel}
                     >
                         Go Back
-                        
                     </Button>
                     <Button
                         variant="contained"
                         color="primary"
                         disabled={isSubmitting}
-                        // onClick={()=>{console.log("asdfasdfasdfasdfasdf")}}
                         type="submit"
                     >
                         Submit
