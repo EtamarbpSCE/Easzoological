@@ -17,7 +17,8 @@ import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router';
 
 const fileName = (qr) => {
-    return `https://server.easzoologic.xyz/images/` + qr.split('\\').pop();
+    console.log("qr ", qr)
+    return `https://server.easzoologic.xyz/images/` + qr?.split('\\').pop();
 };
 
 function Row(props) {
@@ -39,7 +40,7 @@ function Row(props) {
     console.log(`Removing cage with ID: ${row.id}`);
     // Add your remove logic here
   };
-
+  console.log(row)
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }} onClick={() => setOpen(!open)}>
@@ -62,6 +63,7 @@ function Row(props) {
                 <Typography variant="h6" gutterBottom component="div">
                   Additional Data
                 </Typography>
+                
                 {role === 1 && (
                   <a
                     href={fileName(row.QR_path)}
