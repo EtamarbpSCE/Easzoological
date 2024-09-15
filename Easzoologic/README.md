@@ -70,8 +70,8 @@ Ensure you have the following installed:
 ## Running the Application
   **Once the setup is complete**:
   
-	- The server will be running on the default port (typically http://localhost:3000).
-	- The client will be running on the default Vite port (typically http://localhost:5173).
+- The server will be running on the default port (typically http://localhost:3000).
+- The client will be running on the default Vite port (typically http://localhost:5173).
 	
  ---
  
@@ -81,6 +81,5 @@ Ensure you have the following installed:
 - **Ron Biton**
 	
  ---
-
-	This project is submitted as part of the final project requirement for the Software Engineering degree at SCE - College of Engineering.
+This project is submitted as part of the final project requirement for the Software Engineering degree at SCE - College of Engineering.
  ---
