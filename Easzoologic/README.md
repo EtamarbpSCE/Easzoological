@@ -67,7 +67,7 @@ Ensure you have the following installed:
 
  ---
  
-### Running the Application
+## Running the Application
   **Once the setup is complete**:
   
 	- The server will be running on the default port (typically http://localhost:3000).
@@ -75,9 +75,10 @@ Ensure you have the following installed:
 	
  ---
  
- ### Creators
-	- **Etamar Ben Porat**
-	- **Ron Biton**
+## Creators
+ 
+- **Etamar Ben Porat**
+- **Ron Biton**
 	
  ---
 
