@@ -1,6 +1,6 @@
 # Zoological Management Application
 
-**Final Project for Software Engineering Degree - SCE College of Engineering**
+**Final Project for Software Engineering - SCE College of Engineering**
 
 ## Project Overview
 
@@ -41,29 +41,7 @@ Ensure you have the following installed:
 
 ## You should ask for the .env file to run it properly!
 
-### Server Setup
 
-1. **Navigate to the `server` directory**:
-   - Open your terminal.
-   - Change directory to the server folder using the following command:
-   
-   ```bash
-   cd server
-   ```
-   
-2. **Install dependencies**:
-   - Run the following command to install the necessary Node.js packages:
-   
-   ```bash
-   npm install
-   ```   
-   
-3. **Start the server by running the following command**:
-   - Run the following command to install the necessary Node.js packages:
-   
-   ```bash
-   npm run dev
-   ```   
 
    
 ### Client Setup
@@ -91,15 +69,17 @@ Ensure you have the following installed:
  
 ### Running the Application
   **Once the setup is complete**:
+  
 	- The server will be running on the default port (typically http://localhost:3000).
 	- The client will be running on the default Vite port (typically http://localhost:5173).
 	
  ---
  
  ### Creators
-	- *Etamar Ben Porat*
-	- *Ron Biton*
+	- **Etamar Ben Porat**
+	- **Ron Biton**
 	
----
+ ---
+
 	This project is submitted as part of the final project requirement for the Software Engineering degree at SCE - College of Engineering.
----
+ ---
