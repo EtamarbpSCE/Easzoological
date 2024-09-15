@@ -1,6 +1,7 @@
 # Zoological Management Application
 
 **Final Project for Software Engineering - SCE College of Engineering**
+**You can try it your self at https://easzoologic.xyz**
 
 ## Project Overview
 
@@ -67,6 +68,7 @@ Ensure you have the following installed:
 
  ---
  
+
 ## Running the Application
   **Once the setup is complete**:
   
